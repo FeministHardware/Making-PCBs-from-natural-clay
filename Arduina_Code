@@ -1,0 +1,399 @@
+// Code for a stand alone Atmega328p on a Natural Clay PCB Board 
+// For more info: https://github.com/FeministHardware/Making-PCBs-from-natural-clay
+
+// Concept by Patrícia J. Reis & Stefanie Wuschitz
+// Programing by Daniel Schatzmayr
+// 3D printing by Klemens Kohlweis
+// Project research funded by FWF PEEK AR580
+
+#include <CapacitiveSensor.h>
+//#include "pitches.h"
+#define NOTE_B0  31
+#define NOTE_C1  33
+#define NOTE_CS1 35
+#define NOTE_D1  37
+#define NOTE_DS1 39
+#define NOTE_E1  41
+#define NOTE_F1  44
+#define NOTE_FS1 46
+#define NOTE_G1  49
+#define NOTE_GS1 52
+#define NOTE_A1  55
+#define NOTE_AS1 58
+#define NOTE_B1  62
+#define NOTE_C2  65
+#define NOTE_CS2 69
+#define NOTE_D2  73
+#define NOTE_DS2 78
+#define NOTE_E2  82
+#define NOTE_F2  87
+#define NOTE_FS2 93
+#define NOTE_G2  98
+#define NOTE_GS2 104
+#define NOTE_A2  110
+#define NOTE_AS2 117
+#define NOTE_B2  123
+#define NOTE_C3  131
+#define NOTE_CS3 139
+#define NOTE_D3  147
+#define NOTE_DS3 156
+#define NOTE_E3  165
+#define NOTE_F3  175
+#define NOTE_FS3 185
+#define NOTE_G3  196
+#define NOTE_GS3 208
+#define NOTE_A3  220
+#define NOTE_AS3 233
+#define NOTE_B3  247
+#define NOTE_C4  262
+#define NOTE_CS4 277
+#define NOTE_D4  294
+#define NOTE_DS4 311
+#define NOTE_E4  330
+#define NOTE_F4  349
+#define NOTE_FS4 370
+#define NOTE_G4  392
+#define NOTE_GS4 415
+#define NOTE_A4  440
+#define NOTE_AS4 466
+#define NOTE_B4  494
+#define NOTE_C5  523
+#define NOTE_CS5 554
+#define NOTE_D5  587
+#define NOTE_DS5 622
+#define NOTE_E5  659
+#define NOTE_F5  698
+#define NOTE_FS5 740
+#define NOTE_G5  784
+#define NOTE_GS5 831
+#define NOTE_A5  880
+#define NOTE_AS5 932
+#define NOTE_B5  988
+#define NOTE_C6  1047
+#define NOTE_CS6 1109
+#define NOTE_D6  1175
+#define NOTE_DS6 1245
+#define NOTE_E6  1319
+#define NOTE_F6  1397
+#define NOTE_FS6 1480
+#define NOTE_G6  1568
+#define NOTE_GS6 1661
+#define NOTE_A6  1760
+#define NOTE_AS6 1865
+#define NOTE_B6  1976
+#define NOTE_C7  2093
+#define NOTE_CS7 2217
+#define NOTE_D7  2349
+#define NOTE_DS7 2489
+#define NOTE_E7  2637
+#define NOTE_F7  2794
+#define NOTE_FS7 2960
+#define NOTE_G7  3136
+#define NOTE_GS7 3322
+#define NOTE_A7  3520
+#define NOTE_AS7 3729
+#define NOTE_B7  3951
+#define NOTE_C8  4186
+#define NOTE_CS8 4435
+#define NOTE_D8  4699
+#define NOTE_DS8 4978
+#define REST      0
+
+const int melody[] = {
+  NOTE_E5
+};
+
+const int melody2[] = {
+
+  // Super Mario Bros theme
+  // Score available at https://musescore.com/user/2123/scores/2145
+  // Theme by Koji Kondo
+  
+  
+  NOTE_E5,8, NOTE_E5,8, REST,8, NOTE_E5,8, REST,8, NOTE_C5,8, NOTE_E5,8, //1
+  NOTE_G5,4, REST,4, NOTE_G4,8, REST,4, 
+  NOTE_C5,-4, NOTE_G4,8, REST,4, NOTE_E4,-4, // 3
+  NOTE_A4,4, NOTE_B4,4, NOTE_AS4,8, NOTE_A4,4,
+  NOTE_G4,-8, NOTE_E5,-8, NOTE_G5,-8, NOTE_A5,4, NOTE_F5,8, NOTE_G5,8,
+  REST,8, NOTE_E5,4,NOTE_C5,8, NOTE_D5,8, NOTE_B4,-4,
+  NOTE_C5,-4, NOTE_G4,8, REST,4, NOTE_E4,-4, // repeats from 3
+  NOTE_A4,4, NOTE_B4,4, NOTE_AS4,8, NOTE_A4,4,
+  NOTE_G4,-8, NOTE_E5,-8, NOTE_G5,-8, NOTE_A5,4, NOTE_F5,8, NOTE_G5,8,
+  REST,8, NOTE_E5,4,NOTE_C5,8, NOTE_D5,8, NOTE_B4,-4,
+
+  
+  REST,4, NOTE_G5,8, NOTE_FS5,8, NOTE_F5,8, NOTE_DS5,4, NOTE_E5,8,//7
+  REST,8, NOTE_GS4,8, NOTE_A4,8, NOTE_C4,8, REST,8, NOTE_A4,8, NOTE_C5,8, NOTE_D5,8,
+  REST,4, NOTE_DS5,4, REST,8, NOTE_D5,-4,
+  NOTE_C5,2, REST,2,
+
+  REST,4, NOTE_G5,8, NOTE_FS5,8, NOTE_F5,8, NOTE_DS5,4, NOTE_E5,8,//repeats from 7
+  REST,8, NOTE_GS4,8, NOTE_A4,8, NOTE_C4,8, REST,8, NOTE_A4,8, NOTE_C5,8, NOTE_D5,8,
+  REST,4, NOTE_DS5,4, REST,8, NOTE_D5,-4,
+  NOTE_C5,2, REST,2,
+
+  NOTE_C5,8, NOTE_C5,4, NOTE_C5,8, REST,8, NOTE_C5,8, NOTE_D5,4,//11
+  NOTE_E5,8, NOTE_C5,4, NOTE_A4,8, NOTE_G4,2,
+
+  NOTE_C5,8, NOTE_C5,4, NOTE_C5,8, REST,8, NOTE_C5,8, NOTE_D5,8, NOTE_E5,8,//13
+  REST,1, 
+  NOTE_C5,8, NOTE_C5,4, NOTE_C5,8, REST,8, NOTE_C5,8, NOTE_D5,4,
+  NOTE_E5,8, NOTE_C5,4, NOTE_A4,8, NOTE_G4,2,
+  NOTE_E5,8, NOTE_E5,8, REST,8, NOTE_E5,8, REST,8, NOTE_C5,8, NOTE_E5,4,
+  NOTE_G5,4, REST,4, NOTE_G4,4, REST,4, 
+  NOTE_C5,-4, NOTE_G4,8, REST,4, NOTE_E4,-4, // 19
+  
+  NOTE_A4,4, NOTE_B4,4, NOTE_AS4,8, NOTE_A4,4,
+  NOTE_G4,-8, NOTE_E5,-8, NOTE_G5,-8, NOTE_A5,4, NOTE_F5,8, NOTE_G5,8,
+  REST,8, NOTE_E5,4, NOTE_C5,8, NOTE_D5,8, NOTE_B4,-4,
+
+  NOTE_C5,-4, NOTE_G4,8, REST,4, NOTE_E4,-4, // repeats from 19
+  NOTE_A4,4, NOTE_B4,4, NOTE_AS4,8, NOTE_A4,4,
+  NOTE_G4,-8, NOTE_E5,-8, NOTE_G5,-8, NOTE_A5,4, NOTE_F5,8, NOTE_G5,8,
+  REST,8, NOTE_E5,4, NOTE_C5,8, NOTE_D5,8, NOTE_B4,-4,
+
+  NOTE_E5,8, NOTE_C5,4, NOTE_G4,8, REST,4, NOTE_GS4,4,//23
+  NOTE_A4,8, NOTE_F5,4, NOTE_F5,8, NOTE_A4,2,
+  NOTE_D5,-8, NOTE_A5,-8, NOTE_A5,-8, NOTE_A5,-8, NOTE_G5,-8, NOTE_F5,-8,
+  
+  NOTE_E5,8, NOTE_C5,4, NOTE_A4,8, NOTE_G4,2, //26
+  NOTE_E5,8, NOTE_C5,4, NOTE_G4,8, REST,4, NOTE_GS4,4,
+  NOTE_A4,8, NOTE_F5,4, NOTE_F5,8, NOTE_A4,2,
+  NOTE_B4,8, NOTE_F5,4, NOTE_F5,8, NOTE_F5,-8, NOTE_E5,-8, NOTE_D5,-8,
+  NOTE_C5,8, NOTE_E4,4, NOTE_E4,8, NOTE_C4,2,
+
+  NOTE_E5,8, NOTE_C5,4, NOTE_G4,8, REST,4, NOTE_GS4,4,//repeats from 23
+  NOTE_A4,8, NOTE_F5,4, NOTE_F5,8, NOTE_A4,2,
+  NOTE_D5,-8, NOTE_A5,-8, NOTE_A5,-8, NOTE_A5,-8, NOTE_G5,-8, NOTE_F5,-8,
+  
+  NOTE_E5,8, NOTE_C5,4, NOTE_A4,8, NOTE_G4,2, //26
+  NOTE_E5,8, NOTE_C5,4, NOTE_G4,8, REST,4, NOTE_GS4,4,
+  NOTE_A4,8, NOTE_F5,4, NOTE_F5,8, NOTE_A4,2,
+  NOTE_B4,8, NOTE_F5,4, NOTE_F5,8, NOTE_F5,-8, NOTE_E5,-8, NOTE_D5,-8,
+  NOTE_C5,8, NOTE_E4,4, NOTE_E4,8, NOTE_C4,2,
+  NOTE_C5,8, NOTE_C5,4, NOTE_C5,8, REST,8, NOTE_C5,8, NOTE_D5,8, NOTE_E5,8,
+  REST,1,
+
+  NOTE_C5,8, NOTE_C5,4, NOTE_C5,8, REST,8, NOTE_C5,8, NOTE_D5,4, //33
+  NOTE_E5,8, NOTE_C5,4, NOTE_A4,8, NOTE_G4,2,
+  NOTE_E5,8, NOTE_E5,8, REST,8, NOTE_E5,8, REST,8, NOTE_C5,8, NOTE_E5,4,
+  NOTE_G5,4, REST,4, NOTE_G4,4, REST,4, 
+  NOTE_E5,8, NOTE_C5,4, NOTE_G4,8, REST,4, NOTE_GS4,4,
+  NOTE_A4,8, NOTE_F5,4, NOTE_F5,8, NOTE_A4,2,
+  NOTE_D5,-8, NOTE_A5,-8, NOTE_A5,-8, NOTE_A5,-8, NOTE_G5,-8, NOTE_F5,-8,
+  
+  NOTE_E5,8, NOTE_C5,4, NOTE_A4,8, NOTE_G4,2, //40
+  NOTE_E5,8, NOTE_C5,4, NOTE_G4,8, REST,4, NOTE_GS4,4,
+  NOTE_A4,8, NOTE_F5,4, NOTE_F5,8, NOTE_A4,2,
+  NOTE_B4,8, NOTE_F5,4, NOTE_F5,8, NOTE_F5,-8, NOTE_E5,-8, NOTE_D5,-8,
+  NOTE_C5,8, NOTE_E4,4, NOTE_E4,8, NOTE_C4,2,
+  
+  //game over sound
+  NOTE_C5,-4, NOTE_G4,-4, NOTE_E4,4, //45
+  NOTE_A4,-8, NOTE_B4,-8, NOTE_A4,-8, NOTE_GS4,-8, NOTE_AS4,-8, NOTE_GS4,-8,
+  NOTE_G4,8, NOTE_D4,8, NOTE_E4,-2,  
+
+};
+
+const int pinSound = 13;
+const int pinLed = 11;
+const int pinMotor = 9;
+
+void PlayNote(bool stepper, bool on,float scale = 1,int offset = 0)
+{
+  static int idx = 0;
+  static bool prvStepper = false;
+  if(idx >= sizeof(melody) / sizeof(int))idx = 0;
+  if(scale <=0) scale = 0.1f;
+  if(!on)
+  {
+    prvStepper = false;
+    noTone(pinSound);
+    return;
+  }
+  if(stepper && !prvStepper)
+  {
+    if(melody[idx]==0){
+       noTone(pinSound);return;
+    }
+      if(melody[idx] < 20)idx++;
+      if(idx >= sizeof(melody) / sizeof(int))idx = 0;
+     tone(pinSound, (melody[idx] + offset) * scale);
+     idx++;
+  }
+  prvStepper = stepper;
+}
+CapacitiveSensor   cs_4_2 = CapacitiveSensor(A3,A2);        // 10M resistor between pins 4 & 2, pin 2 is sensor pin, add a wire and or foil if desired
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(4800);
+  // Capsensor
+  cs_4_2.set_CS_Timeout_Millis(30);
+   cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
+  //Button 
+  digitalWrite(A0,HIGH);  pinMode(A1,OUTPUT);  digitalWrite(A1,LOW); // PullUP
+  //Divider
+  pinMode(A4,OUTPUT);digitalWrite(A4,LOW);pinMode(2,OUTPUT);digitalWrite(2,HIGH);
+
+  //Outputs
+  pinMode(pinLed,OUTPUT);
+ // pinMode(pinSound,OUTPUT);
+  pinMode(pinMotor,OUTPUT);
+}
+
+float ReadCapSensor()
+{
+   static float hist = cs_4_2.capacitiveSensor(20);
+    hist = (hist * 3 + (float)cs_4_2.capacitiveSensor(20)) / 4.0f;
+    return hist;
+}
+bool ReadButton()
+{
+  return digitalRead(A0) == 0 ? true : false;
+}
+float ReadVoltageDivider()
+{
+  return 1023 - analogRead(A5); // inverted
+  //return analogRead(A5);      // non inverted
+}
+float offset = -10000;
+float capSensor = 0,voltDivider = 0;
+float capSensorMin1 = 1000,capSensorMin2 = 0;int minSensTimer = 0;
+float scaleSound = 1;
+bool buttonPress = false;
+bool motorOn = false;
+void loop() {
+  // put your main code here, to run repeatedly:
+  capSensor = ReadCapSensor();
+  if(capSensor < capSensorMin1) capSensorMin1 = capSensor;
+  minSensTimer++; 
+  //if(minSensTimer > 10){minSensTimer= 0;if(capSensorMin1 < 1000){if(capSensorMin1 / 10 < capSensorMin2 / 10 - 1)offset--; if(capSensorMin1 / 10 > capSensorMin2 / 10 + 1)offset++;} capSensorMin2 = capSensorMin1; capSensorMin1 = 1000;}
+  
+  if(offset < -1000) 
+  {
+    offset = (capSensor +  ReadCapSensor() +  ReadCapSensor()) / 3; 
+    delay(150);
+    offset += (capSensor +  ReadCapSensor() +  ReadCapSensor()) / 3; 
+    delay(150);
+    offset += (capSensor +  ReadCapSensor() +  ReadCapSensor()) / 3; 
+    offset /= 1.5f;
+  }
+   capSensor -= offset;
+   static int offsetResetCounter = 0;
+   if(capSensor / capSensorMin1  < 1.0025f)offsetResetCounter++;
+   else offsetResetCounter= 0;
+   if(offsetResetCounter > 500){offset = capSensorMin1;offsetResetCounter = 0;}
+  
+  if(capSensorMin1 - offset < 10)
+  { 
+    if(minSensTimer > 10){minSensTimer= 0;if(capSensorMin1 < 1000){if((capSensorMin1 - offset) / 2  - 1> 0)offset++;if((capSensorMin1 - offset) / 2 + 1 < 0)offset--;}capSensorMin1 = 1000;}   
+  }else
+  {
+    if(minSensTimer > 100){minSensTimer= 0;if(capSensorMin1 < 1000){if((capSensorMin1 - offset) / 2  - 1> 0)offset++;if((capSensorMin1 - offset) / 2 + 1 < 0)offset--;}capSensorMin1 = 1000;}   
+  }
+  buttonPress = ReadButton();
+  voltDivider = ReadVoltageDivider();
+  
+  int blinkFreq = GetBlinkValue(buttonPress);
+
+  bool blinkState = BlinkLED(blinkFreq,true);
+
+  scaleSound = (voltDivider / 128.0f) + (capSensor > 300 ? 3.0f : capSensor / 50.0f);
+  
+  PlayNote(blinkState,blinkState,scaleSound);
+
+
+  if(motorOn)
+  {
+    int pwm = voltDivider / 500.0f * 255.0f;
+    if(pwm > 255) pwm = 255;
+    analogWrite(pinMotor,pwm);
+    //analogWrite(pinMotor,128);
+    //digitalWrite(pinMotor,HIGH);
+  }else
+  {
+    digitalWrite(pinMotor,LOW);
+  }
+  // Debug Output
+  Serial.print(capSensor);Serial.print("\t");
+  Serial.print(buttonPress ? 10 : 0);Serial.print("\t");
+  Serial.print(voltDivider / 10);Serial.print("\t");
+   Serial.print(blinkState ? 15 : 0);Serial.print("\t");
+    Serial.print(motorOn ? 20 : 0);Serial.print("\t");
+  Serial.print(blinkFreq);
+  Serial.print("\n");
+}
+
+int GetBlinkValue(bool button)
+{
+  static int res = 0;
+  static unsigned long lastTime  = millis();  
+  static unsigned long lastFreq  = -1;  
+  static unsigned long timerVal1 = millis();  
+  static unsigned long timerVal2 = millis();  
+  static unsigned long timerVal3 = millis();  
+  static unsigned long timerVal4 = millis();  
+  static int state = 0;
+  static bool prv = button;
+  long curTime =  millis();
+  static unsigned long offCounter  =0;
+  if(button) offCounter++;
+  else offCounter = 0;
+
+  
+  if(prv ==false && button || state >= 4)
+  {    
+   // if(lastFreq > 0 && state >= 0 && abs((curTime - lastTime) / 100 - lastFreq / 100) > 1)
+   //   state = 0;
+//lastFreq = (curTime - lastTime);
+    switch(state)
+    {
+      case 0: if( curTime > timerVal4 + 10){state++;timerVal1 = curTime;}break;
+      case 1: if( curTime > timerVal1 + 10){state++;timerVal2 = curTime;}break;
+      case 2: if( curTime > timerVal2 + 10){state++;timerVal3 = curTime;}break;
+      case 3: if( curTime > timerVal3 + 10){state++;timerVal4 = curTime;}break;
+      default:
+      if(abs((timerVal2 - timerVal1) / 100 -  (timerVal4 - timerVal3) / 100) <= 1)
+        res = (timerVal4 - timerVal1) / 4;
+        
+      state = 0;
+      break;
+    }
+  }
+  prv = button;lastTime = curTime;
+
+  if(offCounter >30)  { res = 0;}
+  if(offCounter >= 60){
+      if(offCounter ==60) motorOn = !motorOn;
+    offCounter= 61; //digitalWrite(pinMotor,HIGH);
+  
+    }
+  //else digitalWrite(pinMotor,LOW);
+  
+
+  
+  return res;
+}
+
+
+bool BlinkLED(int blinkFreq, bool on)
+{  
+  static long lastTime = millis();
+  static bool pinState = false;
+  if(blinkFreq <= 0 || !on)
+  {
+    pinState = false;
+    digitalWrite(pinLed, LOW);return false;
+  }
+  if(lastTime + blinkFreq <= millis())
+  {
+    if(pinState)digitalWrite(pinLed, LOW);
+    else digitalWrite(pinLed, HIGH);
+    pinState = !pinState;
+    
+    if(millis() - lastTime > blinkFreq * 2)   lastTime = millis();
+    else lastTime += blinkFreq;
+  }
+  return pinState;
+}
